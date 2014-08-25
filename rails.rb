@@ -8,7 +8,7 @@
 
 # execute this script
 # rails new <project_name> -m <path_to_template>
-# rails new <project_name> -m ~/code/projects/templates/rails.rb
+# rails new <project_name> -d postgresql -m ~/code/projects/templates/rails.rb
 # rails new <project_name> -m https://raw.githubusercontent.com/dhaskew/templates/master/rails.rb
 
 # useful bash alias idea
