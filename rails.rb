@@ -8,7 +8,7 @@
 
 # execute this script
 # rails new <project_name> -m <path_to_template>
-# rails new <project_name> -m ./local_file.rb
+# rails new <project_name> -m ~/code/projects/templates/rails.rb
 # rails new <project_name> -m https://raw.githubusercontent.com/dhaskew/templates/master/rails.rb
 
 # useful bash alias idea
@@ -24,7 +24,6 @@ gem_group :development do
   gem 'binding_of_caller'  #command line on better landing page
   gem 'pry-rails'          #integrate pry, specifically for "rails c"
   gem 'quiet_assets'
-  gem 'spring'
   #gem 'bullet'
   gem 'erb2haml'           #rake haml:replace_erbs
 end
@@ -44,7 +43,6 @@ rake "haml:replace_erbs"
 
 
 #git setup
-
 git :init
 git add: "."
 git commit: %Q{ -m 'Initial Commit' }
