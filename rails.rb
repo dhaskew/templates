@@ -8,7 +8,7 @@
 
 # execute this script
 # rails new <project_name> -m <path_to_template>
-# rails new <project_name> -d postgresql -m ~/code/projects/templates/rails.rb
+# rails new <project_name> -B -d postgresql -m ~/code/projects/templates/rails.rb
 # rails new <project_name> -m https://raw.githubusercontent.com/dhaskew/templates/master/rails.rb
 
 # useful bash alias idea
@@ -28,12 +28,12 @@ gem_group :development do
   gem 'erb2haml'           #rake haml:replace_erbs
 end
 
-case ask("Choose database engine:(postgres, sqlite):", :limited_to => %w[postgres sqlite])
-when "postgres"
-  gem 'pg'
-when "sqlite"
-  gem 'sqlite'
-end
+#case ask("Choose database engine:(postgres, sqlite):", :limited_to => %w[postgres sqlite])
+#when "postgres"
+  #gem 'pg'
+#when "sqlite"
+  #gem 'sqlite'
+#end
 
 #install extra gems
 run "bundle install"
@@ -41,10 +41,16 @@ run "bundle install"
 #convert erb default files to haml
 rake "haml:replace_erbs"
 
+run "bundle exec spring binstub --all"
 
 #git setup
 git :init
 git add: "."
 git commit: %Q{ -m 'Initial Commit' }
+
+puts "#"*50
+puts "Things left to do --> "
+puts "#"*50
+
 
 
