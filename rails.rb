@@ -36,6 +36,7 @@ end
 #end
 
 #install extra gems
+say "Running bundle install"
 run "bundle install"
 
 #convert erb default files to haml
@@ -50,6 +51,8 @@ git commit: %Q{ -m 'Initial Commit' }
 
 puts "#"*50
 puts "Things left to do --> "
+puts "rake db:create"
+puts "rake db:migrate"
 puts "#"*50
 
 
