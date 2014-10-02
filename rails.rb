@@ -52,6 +52,11 @@ end
 #  setup_devise = true
 #end
 
+# Remove Turbolinks
+say 'Silly turbolinks. Delete...'
+gsub_file "Gemfile", /^gem\s+["']turbolinks["'].*$/,''
+
+
 #install extra gems
 say "Running bundle install"
 run "bundle install"
@@ -60,6 +65,10 @@ run "bundle install"
 #convert erb default files to haml
 say "running erb to haml conversion"
 rake "haml:replace_erbs"
+
+# Remove Turbolink Remnants
+gsub_file('app/views/layouts/application.html.haml', /\, \'data-turbolinks-track\' => true/, '')
+gsub_file('app/assets/javascripts/application.js', /\= require turbolinks/, '')
 
 run "bundle exec spring binstub --all"
 
@@ -91,6 +100,7 @@ git commit: %Q{ -m 'Template: Initial Commit' }
 #basic bootstrap setup
 say "running basic bootstrap setup"
 run "rails generate bootstrap:install static"
+run "rails generate bootstrap:layout application fluid -f"
 git add: "."
 git commit: %Q{ -m 'Template: Bootstrap Setup" }
 
@@ -101,10 +111,10 @@ generate(:controller, "MiscPages index")
 git add: "."
 git commit: %Q{ -m 'Template: MiscPages Controller' }
 
-say "fetching basic ApplicationHelper"
-run "curl --output app/helpers/application_helper.rb https://raw.githubusercontent.com/dhaskew/templates/master/application_helper.rb"
-git add: "."
-git commit: %Q{ -m 'Template: application_helper.rb' }
+#say "fetching basic ApplicationHelper"
+#run "curl --output app/helpers/application_helper.rb https://raw.githubusercontent.com/dhaskew/templates/master/application_helper.rb"
+#git add: "."
+#git commit: %Q{ -m 'Template: application_helper.rb' }
 
 
 #basic devise setup
@@ -123,8 +133,8 @@ if setup_devise
   git commit: %Q{ -m 'Template: Basic Devise Setup' }
 end
 
-say "fetching flash example"
-run "curl --output flash.haml https://raw.githubusercontent.com/dhaskew/templates/master/flash.haml"
+#say "fetching flash example"
+#run "curl --output flash.haml https://raw.githubusercontent.com/dhaskew/templates/master/flash.haml"
 
 puts "#"*50
 puts "Things left to do --> "
@@ -135,13 +145,13 @@ puts "Update Application Controller with :"
 puts "before_action :authenticate_user!"
 puts "----End Devise Setup---"
 
-puts "Remove turbolinks support: "
-puts "* update gemfile"
-puts "* update site template"
-puts "* update application.js"
+#puts "Remove turbolinks support: "
+#puts "* update gemfile"
+#puts "* update site template"
+#puts "* update application.js"
 
-puts "add flash support to application layout"
-puts "review flash.haml, then delete"
+#puts "add flash support to application layout"
+#puts "review flash.haml, then delete"
 puts "run rake user - to create starting admin user"
 
 puts "#"*50
