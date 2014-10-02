@@ -17,6 +17,7 @@
 #############  START ACTUAL CODE ##############
 
 gem 'haml-rails'
+gem 'twitter-bootstrap-rails'
 
 gem_group :development do
   gem 'annotate'           #adds table info to models via 'annotate' command
@@ -28,20 +29,33 @@ gem_group :development do
   gem 'erb2haml'           #rake haml:replace_erbs
 end
 
+gem_group :development, :test do
+  gem 'factory_girl_rails', require: false
+  gem 'rspec-rails'
+end
+
+gem_group :test do
+  gem 'capybara'
+  gem 'launchy'
+  gem 'simplecov'
+end
+
 setup_devise = false
 
-case ask("Setup Devise?:(yes, no):", :limited_to => %w[yes no])
-when "yes"
+if yes?("Setup Devise?")
   gem 'devise'
-  setup_devise = true
+  setup_devise = true 
 end
+#case ask("Setup Devise?:(yes, no):", :limited_to => %w[yes no])
+#when "yes"
+#  gem 'devise'
+#  setup_devise = true
+#end
 
 #install extra gems
 say "Running bundle install"
 run "bundle install"
 
-run "rails generate devise:install" if setup_devise
-run "rails generate devise User" if setup_devise
 
 #convert erb default files to haml
 say "running erb to haml conversion"
@@ -55,22 +69,67 @@ run "bundle exec spring binstub --all"
 #    run "ln -s ~/commit-rails/rails rails"
 #end
 
+say "setting default route to 'misc_pages#index'"
+route "root to: 'misc_pages#index'"
+
+say "fetching rake tasks"
+run "curl --output lib/tasks/user.rake https://raw.githubusercontent.com/dhaskew/templates/master/user.rake"
+
+
+say "setting up database - Development"
+rake "db:create", env: 'development'
+rake "db:migrate", env: 'development'
+
+say "setting up database - Test"
+rake "db:create", env: 'test'
+rake "db:migrate", env: 'test'
+
 #git setup
 git :init
 git add: "."
-git commit: %Q{ -m 'Initial Commit' }
+git commit: %Q{ -m 'Template: Initial Commit' }
+
+say "generating a basic misc_pages_controller"
+#run "rails g controller MiscPages index"
+generate(:controller, "MiscPages index")
+
+git add: "."
+git commit: %Q{ -m 'Template: MiscPages Controller' }
+
+#basic devise setup
+if setup_devise
+  say "setting up devise"
+  run "rails generate devise:install"
+  run "rails generate devise User"
+
+  say "Migrating Database - Development"
+  rake "db:migrate", env: 'development'
+
+  say "Migrating Database - Test"
+  rake "db:migrate", env: 'test'
+
+  git add: "."
+  git commit: %Q{ -m 'Template: Basic Devise Setup' }
+end
 
 puts "#"*50
 puts "Things left to do --> "
-puts "rake db:create"
-puts "rake db:migrate"
 puts "----Devise Setup---"
 puts "update: config/environments/development.rb"
 puts "add: config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }"
 puts "Update Application Controller with :"
 puts "before_action :authenticate_user!"
 puts "----End Devise Setup---"
-puts "setup the root route to something"
+
+puts "Remove turbolinks support: "
+puts "* update gemfile"
+puts "* update site template"
+puts "* update application.js"
+
+puts "add flash support to application layout"
+
+puts "run rake user - to create starting admin user"
+
 puts "#"*50
 
 
