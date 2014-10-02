@@ -28,21 +28,32 @@ gem_group :development do
   gem 'erb2haml'           #rake haml:replace_erbs
 end
 
-#case ask("Choose database engine:(postgres, sqlite):", :limited_to => %w[postgres sqlite])
-#when "postgres"
-  #gem 'pg'
-#when "sqlite"
-  #gem 'sqlite'
-#end
+setup_devise = false
+
+case ask("Setup Devise?:(yes, no):", :limited_to => %w[yes no])
+when "yes"
+  gem 'devise'
+  setup_devise = true
+end
 
 #install extra gems
 say "Running bundle install"
 run "bundle install"
 
+run "rails generate devise:install" if setup_devise
+run "rails generate devise User" if setup_devise
+
 #convert erb default files to haml
+say "running erb to haml conversion"
 rake "haml:replace_erbs"
 
 run "bundle exec spring binstub --all"
+
+# download useful rake tasks?
+# james had some here : https://github.com/theironyard-rails-atl/js-game-demo
+#inside('vendor') do
+#    run "ln -s ~/commit-rails/rails rails"
+#end
 
 #git setup
 git :init
@@ -53,6 +64,13 @@ puts "#"*50
 puts "Things left to do --> "
 puts "rake db:create"
 puts "rake db:migrate"
+puts "----Devise Setup---"
+puts "update: config/environments/development.rb"
+puts "add: config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }"
+puts "Update Application Controller with :"
+puts "before_action :authenticate_user!"
+puts "----End Devise Setup---"
+puts "setup the root route to something"
 puts "#"*50
 
 
