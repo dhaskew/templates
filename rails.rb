@@ -129,6 +129,8 @@ if setup_devise
   say "Migrating Database - Test"
   rake "db:migrate", env: 'test'
 
+  environment 'config.action_mailer.default_url_options = {host: "localhost", port: 3000}', env: 'development'
+
   git add: "."
   git commit: %Q{ -m 'Template: Basic Devise Setup' }
 end
@@ -139,7 +141,7 @@ end
 puts "#"*50
 puts "Things left to do --> "
 puts "----Devise Setup---"
-puts "update: config/environments/development.rb"
+puts "needed? : update: config/environments/development.rb"
 puts "add: config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }"
 puts "Update Application Controller with :"
 puts "before_action :authenticate_user!"
