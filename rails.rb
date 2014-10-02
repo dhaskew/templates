@@ -68,7 +68,6 @@ run "bundle exec spring binstub --all"
 #inside('vendor') do
 #    run "ln -s ~/commit-rails/rails rails"
 #end
-
 say "setting default route to 'misc_pages#index'"
 route "root to: 'misc_pages#index'"
 
@@ -89,12 +88,24 @@ git :init
 git add: "."
 git commit: %Q{ -m 'Template: Initial Commit' }
 
+#basic bootstrap setup
+say "running basic bootstrap setup"
+run "rails generate bootstrap:install static"
+git add: "."
+git commit: %Q{ -m 'Template: Bootstrap Setup" }
+
 say "generating a basic misc_pages_controller"
 #run "rails g controller MiscPages index"
 generate(:controller, "MiscPages index")
 
 git add: "."
 git commit: %Q{ -m 'Template: MiscPages Controller' }
+
+say "fetching basic ApplicationHelper"
+run "curl --output app/helpers/application_helper.rb https://raw.githubusercontent.com/dhaskew/templates/master/application_helper.rb"
+git add: "."
+git commit: %Q{ -m 'Template: application_helper.rb' }
+
 
 #basic devise setup
 if setup_devise
@@ -112,6 +123,9 @@ if setup_devise
   git commit: %Q{ -m 'Template: Basic Devise Setup' }
 end
 
+say "fetching flash example"
+run "curl --output flash.haml https://raw.githubusercontent.com/dhaskew/templates/master/flash.haml"
+
 puts "#"*50
 puts "Things left to do --> "
 puts "----Devise Setup---"
@@ -127,7 +141,7 @@ puts "* update site template"
 puts "* update application.js"
 
 puts "add flash support to application layout"
-
+puts "review flash.haml, then delete"
 puts "run rake user - to create starting admin user"
 
 puts "#"*50
