@@ -97,6 +97,12 @@ git :init
 git add: "."
 git commit: %Q{ -m 'Template: Initial Commit' }
 
+say "setting up rspec"
+run "rm -r test"
+run "rails generate rspec:install"
+git add: "."
+git commit: %Q{ -m 'Template: Initial Rspec Setup' }
+
 #basic bootstrap setup
 say "running basic bootstrap setup"
 run "rails generate bootstrap:install static"
