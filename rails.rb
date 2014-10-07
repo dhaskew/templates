@@ -37,7 +37,7 @@ end
 gem_group :test do
   gem 'capybara'
   gem 'launchy'
-  gem 'simplecov'
+  gem 'simplecov', :require => false
 end
 
 setup_devise = false
